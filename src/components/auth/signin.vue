@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div id="signin">
     <div class="signin-form">
       <form @submit.prevent="onSubmit">
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import axios from '../../axios-auth';
+
   export default {
     data () {
       return {
@@ -39,6 +41,13 @@
           password: this.password,
         }
         console.log(formData)
+        axios.post('verifyPassword?key=AIzaSyCnjl4T-NsVO-jJViKKoN0-FRUzMvrv2kc', {
+            email: formData.email,
+            password: formData.password,
+            returnSecureToken: true
+          })
+          .then(res => console.log(res))
+          .catch(error => console.log(error))
       }
     }
   }
