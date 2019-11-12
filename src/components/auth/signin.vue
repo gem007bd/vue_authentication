@@ -8,7 +8,9 @@
                   type="email"
                   id="email"
                   v-model="email">
+        <div>{{ $v }}</div>          
         </div>
+        
         <div class="input">
           <label for="password">Password</label>
           <input
@@ -25,11 +27,18 @@
 </template>
 
 <script>
+  import { required, email } from 'vuelidate/lib/validators'
   export default {
     data () {
       return {
         email: '',
         password: ''
+      }
+    },
+    validations: {
+      email: {
+        required,
+        email
       }
     },
     methods: {

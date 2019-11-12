@@ -2,33 +2,41 @@
   <div id="signup">
     <div class="signup-form">
       <form @submit.prevent="onSubmit">
-        <div class="input">
+        <div class="input" :class="{invalid: $v.email.$error}">
           <label for="email">Mail</label>
           <input
                   type="email"
                   id="email"
+                  @blur="$v.email.$touch()"
                   v-model="email">
+          <p v-if="!$v.email.email"> Please provide a valid email address </p>
         </div>
-        <div class="input">
+        <div class="input" :class="{invalid: $v.age.$error}">
           <label for="age">Your Age</label>
           <input
                   type="number"
                   id="age"
+                  @blur="$v.age.$touch()"
                   v-model.number="age">
+                  <p v-if="!$v.age.minVal">You have to be at least {{ $v.age.$params.minVal.min}} years old.</p>
         </div>
-        <div class="input">
+        <div class="input" :class="{invalid: $v.password.$error}">
           <label for="password">Password</label>
           <input
                   type="password"
                   id="password"
+                  @blur="$v.password.$touch()"
                   v-model="password">
+                  <p v-if="!$v.password.minLen">Password should be more than 6 digits</p>
         </div>
-        <div class="input">
-          <label for="confirm-password">Confirm Password</label>
+        <div class="input" :class="{invalid: $v.confirmPassword.$error}">
+          <label for="confirmPassword">Confirm Password</label>
           <input
                   type="password"
-                  id="confirm-password"
+                  id="confirmPassword"
+                  @blur="$v.confirmPassword.$touch()"
                   v-model="confirmPassword">
+                  <p v-if="!$v.confirmPassword.saveAs">Password should be same</p>
         </div>
         <div class="input">
           <label for="country">Country</label>
@@ -69,7 +77,7 @@
 </template>
 
 <script>
-
+  import { required, email, numeric, minValue, minLength, sameAs } from 'vuelidate/lib/validators'
   export default {
     data () {
       return {
@@ -80,6 +88,26 @@
         country: 'usa',
         hobbyInputs: [],
         terms: false
+      }
+    },
+    validations: {
+      email: {
+        required,
+        email
+      },
+      age: {
+        required,
+        numeric,
+        minVal: minValue(18)
+      },
+      password: {
+        required,
+        minLen: minLength(6)
+      },
+      confirmPassword: {
+        required,
+        minLen: minLength(6),
+        sameAs: sameAs('password')
       }
     },
     methods: {
@@ -123,6 +151,7 @@
     margin: 10px auto;
   }
 
+
   .input label {
     display: block;
     color: #4e4e4e;
@@ -154,6 +183,14 @@
   .input select {
     border: 1px solid #ccc;
     font: inherit;
+  }
+
+  .input.invalid input {
+    border: 1px solid red;
+    background-color: antiquewhite;
+  }
+  .input.invalid label {
+    color: red;
   }
 
   .hobbies button {
