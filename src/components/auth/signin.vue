@@ -7,8 +7,7 @@
           <input
                   type="email"
                   id="email"
-                  v-model="email">
-        <div>{{ $v }}</div>          
+                  v-model="email">     
         </div>
         
         <div class="input">
@@ -33,12 +32,6 @@
       return {
         email: '',
         password: ''
-      }
-    },
-    validations: {
-      email: {
-        required,
-        email
       }
     },
     methods: {
